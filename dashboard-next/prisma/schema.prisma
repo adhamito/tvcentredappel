@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Expedition {
+  id               String           @id
+  status           ExpeditionStatus @default(PENDING)
+  livreurId        String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime
+  commandesLivrees Int              @default(0)
+  date             DateTime         @default(now())
+  totalCommandes   Int              @default(0)
+  vehicleId        String?
+  distance         Float            @default(0)
+  fuel             Float            @default(0)
+  vehicleType      VehicleType?
+  Livreur          Livreur?         @relation(fields: [livreurId], references: [id])
+  Vehicle          Vehicle?         @relation(fields: [vehicleId], references: [id])
+}
+
+model Livreur {
+  id         String        @id
+  firstName  String
+  lastName   String
+  phone      String
+  status     LivreurStatus @default(AVAILABLE)
+  vehicleId  String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime
+  Expedition Expedition[]
+  Vehicle    Vehicle?      @relation(fields: [vehicleId], references: [id])
+}
+
+model Notification {
+  id        String   @id
+  message   String
+  read      Boolean  @default(false)
+  userId    String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id           String         @id
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+  name         String?
+  role         Role           @default(USER)
+  Notification Notification[]
+  reclamations reclamations[]
+}
+
+model Vehicle {
+  id          String        @id
+  model       String
+  plateNumber String        @unique
+  status      VehicleStatus @default(AVAILABLE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+  type        VehicleType   @default(VOITURE)
+  Expedition  Expedition[]
+  Livreur     Livreur[]
+}
+
+model commandes {
+  id               BigInt   @id @default(autoincrement())
+  livreur_id       BigInt
+  vehicle_id       BigInt
+  sortie_id        BigInt?
+  created_at       DateTime @db.Timestamptz(6)
+  status           String
+  delivery_minutes Int?
+  distance_km      Float?
+  fuel_liters      Float?
+  created_at_row   DateTime @default(now()) @db.Timestamptz(6)
+  livreur          livreur  @relation(fields: [livreur_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sorties          sorties? @relation(fields: [sortie_id], references: [id], onUpdate: NoAction)
+  vehicle          vehicle  @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([created_at], map: "idx_commandes_created_at")
+  @@index([livreur_id, created_at], map: "idx_commandes_livreur_created_at")
+  @@index([vehicle_id, created_at], map: "idx_commandes_vehicle_created_at")
+}
+
+model historyexpedition {
+  id                String   @id
+  expeditionName    String
+  startDate         DateTime
+  endDate           DateTime
+  monthYear         String
+  destination       String
+  participantsCount Int
+  totalCost         Decimal
+  status            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+
+  @@index([expeditionName])
+  @@index([monthYear])
+}
+
+model livreur {
+  id         BigInt      @id @default(autoincrement())
+  name       String
+  status     String?
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  commandes  commandes[]
+  sorties    sorties[]
+}
+
+model reclamations {
+  id                           String    @id
+  dateReclamation              DateTime  @default(now())
+  modeReception                String
+  serviceConcerne              String
+  typologie                    String
+  title                        String
+  description                  String
+  nomOfficine                  String
+  codeClient                   String
+  ville                        String
+  pharmacienResponsable        String
+  nomMedicament                String
+  numeroLot                    String
+  datePeremption               DateTime
+  quantiteConcernee            Int
+  resultatsInvestigation       String?
+  causeIdentifiee              String?
+  gravite                      Gravite?
+  risquePatient                Boolean?
+  actionsImmediates            String?
+  actionsPreventives           String?
+  responsableCAPA              String?
+  delaiCAPA                    DateTime?
+  personneApplique             String?
+  cloture                      Boolean?
+  dateReponseClient            DateTime?
+  satisfactionClient           Boolean?
+  validationResponsableQualite String?
+  status                       Status    @default(OPEN)
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime
+  userId                       String
+  User                         User      @relation(fields: [userId], references: [id])
+}
+
+model sorties {
+  id         BigInt      @id @default(autoincrement())
+  livreur_id BigInt
+  vehicle_id BigInt
+  started_at DateTime    @db.Timestamptz(6)
+  ended_at   DateTime?   @db.Timestamptz(6)
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  commandes  commandes[]
+  livreur    livreur     @relation(fields: [livreur_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  vehicle    vehicle     @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([started_at], map: "idx_sorties_started_at")
+}
+
+model tirage {
+  id         String   @id
+  date       DateTime @default(now())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime
+  lignes     Int?
+  bl         String?
+
+  @@unique([date, name], map: "tirage_unique_date_name_idx")
+  @@index([date])
+}
+
+model vehicle {
+  id                        BigInt                      @id @default(autoincrement())
+  type                      String
+  plate                     String?                     @unique
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  commandes                 commandes[]
+  sorties                   sorties[]
+  vehicle_maintenance       vehicle_maintenance[]
+  vehicle_performance_daily vehicle_performance_daily[]
+}
+
+model vehicle_maintenance {
+  id          BigInt   @id @default(autoincrement())
+  vehicle_id  BigInt
+  occurred_at DateTime @db.Date
+  cost        Float
+  description String?
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  vehicle     vehicle  @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model vehicle_performance_daily {
+  vehicle_id            BigInt
+  date                  DateTime @db.Date
+  total_deliveries      Int
+  successful_deliveries Int
+  success_rate          Float
+  avg_delivery_minutes  Float?
+  total_distance_km     Float?
+  total_fuel_liters     Float?
+  fuel_efficiency       Float?
+  maintenance_cost      Float    @default(0)
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+  vehicle               vehicle  @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([vehicle_id, date])
+  @@index([date], map: "idx_vehicle_perf_date")
+}
+
+enum ExpeditionStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum Gravite {
+  CRITIQUE
+  MAJEURE
+  MINEURE
+}
+
+enum LivreurStatus {
+  AVAILABLE
+  BUSY
+  OFFLINE
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  MAINTENANCE
+  IN_USE
+}
+
+enum VehicleType {
+  VOITURE
+  MOTOR
+  VELO
+}
