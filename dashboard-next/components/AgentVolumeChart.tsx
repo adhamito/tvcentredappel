@@ -28,8 +28,8 @@ export default function AgentVolumeChart({ data }: AgentVolumeChartProps) {
                 contentStyle={{backgroundColor: '#ffffff', borderColor: '#e0e0e0', color: '#0e677a', borderRadius: '12px', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', fontSize: '12px'}}
             />
             <Legend wrapperStyle={{ paddingTop: '10px' }} />
-            <Bar name="Appels Entrants" dataKey="inbound" fill="#0e677a" radius={[4, 4, 0, 0]} barSize={20} />
-            <Bar name="Appels Sortants" dataKey="outbound" fill="#f59f14" radius={[4, 4, 0, 0]} barSize={20} />
+            <Bar name="Appels Entrants" dataKey="inbound" fill="#1e3a8a" radius={[4, 4, 0, 0]} barSize={20} />
+            <Bar name="Appels Sortants" dataKey="outbound" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={20} />
           </BarChart>
         </ResponsiveContainer>
       </div>

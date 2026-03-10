@@ -32,10 +32,37 @@ export default function RevenueChart({ data }: RevenueChartProps) {
                   return [`${value ?? ''}`, 'Revenue'];
                 }}
             />
+            <defs>
+              <linearGradient id="revGreen" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#065f46" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+              <linearGradient id="revBlue" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#1e3a8a" />
+                <stop offset="100%" stopColor="#3b82f6" />
+              </linearGradient>
+              <linearGradient id="revYellow" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#854d0e" />
+                <stop offset="100%" stopColor="#f59e0b" />
+              </linearGradient>
+              <linearGradient id="revPurple" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#4c1d95" />
+                <stop offset="100%" stopColor="#8b5cf6" />
+              </linearGradient>
+              <linearGradient id="revPink" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#831843" />
+                <stop offset="100%" stopColor="#ec4899" />
+              </linearGradient>
+              <linearGradient id="revRed" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#991b1b" />
+                <stop offset="100%" stopColor="#ef4444" />
+              </linearGradient>
+            </defs>
             <Bar dataKey="revenue" radius={[4, 4, 0, 0]} barSize={30}>
-              {data?.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={index === 0 ? '#10b981' : '#3b82f6'} />
-              ))}
+              {data?.map((_, index) => {
+                const ids = ['url(#revGreen)','url(#revBlue)','url(#revYellow)','url(#revPurple)','url(#revPink)','url(#revRed)'];
+                return <Cell key={`cell-${index}`} fill={ids[index % ids.length]} />;
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

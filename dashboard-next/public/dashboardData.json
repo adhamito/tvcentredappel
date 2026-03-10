@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-03-10T06:22:47.462Z",
+    "generatedAt": "2026-03-10T07:12:18.537Z",
     "source": "excel",
     "serviceFilter": "Centre d’appel",
     "file": "Réclamations_Anomalies Suivi.xlsx",
@@ -43,7 +43,7 @@
         "revenue": [
           {
             "agent": "Dr. Charif",
-            "revenue": 161
+            "revenue": 186
           }
         ],
         "kpi": {
@@ -86,7 +86,7 @@
         "revenue": [
           {
             "agent": "Mme. Fatima Ezzahra",
-            "revenue": 389
+            "revenue": 407
           }
         ],
         "kpi": {
@@ -162,13 +162,13 @@
           },
           {
             "agent": "Wafae",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           },
           {
             "agent": "DR Yahya ",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           },
           {
             "agent": "Mme Zineb Mabrouk",
@@ -179,19 +179,19 @@
         "revenue": [
           {
             "agent": "DR Yahya ",
-            "revenue": 308
-          },
-          {
-            "agent": "Dr Niama",
-            "revenue": 279
-          },
-          {
-            "agent": "Wafae",
-            "revenue": 258
+            "revenue": 506
           },
           {
             "agent": "Mme Zineb Mabrouk",
-            "revenue": 217
+            "revenue": 321
+          },
+          {
+            "agent": "Dr Niama",
+            "revenue": 309
+          },
+          {
+            "agent": "Wafae",
+            "revenue": 223
           }
         ],
         "kpi": {
@@ -251,12 +251,12 @@
         ],
         "revenue": [
           {
-            "agent": "Idriss",
-            "revenue": 285
+            "agent": "Zakaria",
+            "revenue": 427
           },
           {
-            "agent": "Zakaria",
-            "revenue": 282
+            "agent": "Idriss",
+            "revenue": 355
           }
         ],
         "kpi": {
@@ -317,11 +317,11 @@
         "revenue": [
           {
             "agent": "Fatima Ezzahra",
-            "revenue": 372
+            "revenue": 308
           },
           {
             "agent": "Zakaria",
-            "revenue": 327
+            "revenue": 173
           }
         ],
         "kpi": {
@@ -459,8 +459,8 @@
           },
           {
             "agent": "Dr Niama",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           },
           {
             "agent": "Dr. Charif",
@@ -469,13 +469,13 @@
           },
           {
             "agent": "Wafae",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           },
           {
             "agent": "Mme. Fatima Ezzahra",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           },
           {
             "agent": "Fatima Ezzahra",
@@ -494,46 +494,46 @@
           },
           {
             "agent": "Mme Zineb Mabrouk",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           }
         ],
         "revenue": [
           {
-            "agent": "Zakaria",
-            "revenue": 788
-          },
-          {
-            "agent": "Fatima Ezzahra",
-            "revenue": 380
+            "agent": "Idriss",
+            "revenue": 493
           },
           {
             "agent": "Mme Zineb Mabrouk",
-            "revenue": 369
-          },
-          {
-            "agent": "Idriss",
-            "revenue": 367
+            "revenue": 433
           },
           {
             "agent": "Dr Niama",
-            "revenue": 352
-          },
-          {
-            "agent": "DR Yahya ",
-            "revenue": 343
-          },
-          {
-            "agent": "Mme. Fatima Ezzahra",
-            "revenue": 277
+            "revenue": 422
           },
           {
             "agent": "Wafae",
-            "revenue": 266
+            "revenue": 411
+          },
+          {
+            "agent": "Zakaria",
+            "revenue": 390
           },
           {
             "agent": "Dr. Charif",
-            "revenue": 261
+            "revenue": 313
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "revenue": 307
+          },
+          {
+            "agent": "DR Yahya ",
+            "revenue": 290
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "revenue": 171
           }
         ],
         "kpi": {
@@ -631,13 +631,13 @@
           },
           {
             "agent": "Idriss",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           },
           {
             "agent": "M. Oussama",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           },
           {
             "agent": "M. Adnane",
@@ -648,23 +648,23 @@
         "revenue": [
           {
             "agent": "M Adnane",
-            "revenue": 744
-          },
-          {
-            "agent": "Dr Yahya",
-            "revenue": 692
-          },
-          {
-            "agent": "M. Oussama",
-            "revenue": 284
+            "revenue": 1018
           },
           {
             "agent": "M. Adnane",
-            "revenue": 283
+            "revenue": 593
+          },
+          {
+            "agent": "Dr Yahya",
+            "revenue": 542
+          },
+          {
+            "agent": "M. Oussama",
+            "revenue": 514
           },
           {
             "agent": "Idriss",
-            "revenue": 247
+            "revenue": 153
           }
         ],
         "kpi": {
@@ -707,7 +707,7 @@
         "revenue": [
           {
             "agent": "DR Yahya",
-            "revenue": 226
+            "revenue": 160
           }
         ],
         "kpi": {
@@ -816,49 +816,49 @@
           },
           {
             "agent": "Idriss",
-            "inbound": 0,
-            "outbound": 1
-          },
-          {
-            "agent": "M. Oussama",
-            "inbound": 0,
-            "outbound": 1
-          },
-          {
-            "agent": "M. Adnane",
             "inbound": 1,
             "outbound": 0
           },
           {
-            "agent": "DR Yahya",
+            "agent": "M. Oussama",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "M. Adnane",
             "inbound": 0,
             "outbound": 1
+          },
+          {
+            "agent": "DR Yahya",
+            "inbound": 1,
+            "outbound": 0
           }
         ],
         "revenue": [
           {
             "agent": "M Adnane",
-            "revenue": 800
+            "revenue": 994
           },
           {
             "agent": "Dr Yahya",
-            "revenue": 636
-          },
-          {
-            "agent": "DR Yahya",
-            "revenue": 339
-          },
-          {
-            "agent": "M. Adnane",
-            "revenue": 327
-          },
-          {
-            "agent": "Idriss",
-            "revenue": 298
+            "revenue": 518
           },
           {
             "agent": "M. Oussama",
-            "revenue": 160
+            "revenue": 476
+          },
+          {
+            "agent": "M. Adnane",
+            "revenue": 473
+          },
+          {
+            "agent": "DR Yahya",
+            "revenue": 362
+          },
+          {
+            "agent": "Idriss",
+            "revenue": 247
           }
         ],
         "kpi": {
@@ -1026,13 +1026,13 @@
           },
           {
             "agent": "Dr. Charif",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           },
           {
             "agent": "Wafae",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           },
           {
             "agent": "Mme. Fatima Ezzahra",
@@ -1041,55 +1041,55 @@
           },
           {
             "agent": "Fatima Ezzahra",
-            "inbound": 0,
-            "outbound": 1
+            "inbound": 1,
+            "outbound": 0
           },
           {
             "agent": "M. Oussama",
-            "inbound": 1,
-            "outbound": 0
+            "inbound": 0,
+            "outbound": 1
           }
         ],
         "revenue": [
           {
-            "agent": "Idriss",
-            "revenue": 802
-          },
-          {
             "agent": "Dr Yahya",
-            "revenue": 684
+            "revenue": 782
           },
           {
-            "agent": "Zakaria",
-            "revenue": 438
-          },
-          {
-            "agent": "Mme. Fatima Ezzahra",
-            "revenue": 389
-          },
-          {
-            "agent": "M Adnane",
-            "revenue": 336
-          },
-          {
-            "agent": "Fatima Ezzahra",
-            "revenue": 335
-          },
-          {
-            "agent": "Dr Niama",
-            "revenue": 314
+            "agent": "Idriss",
+            "revenue": 644
           },
           {
             "agent": "Wafae",
-            "revenue": 251
+            "revenue": 592
+          },
+          {
+            "agent": "Zakaria",
+            "revenue": 552
+          },
+          {
+            "agent": "M Adnane",
+            "revenue": 356
+          },
+          {
+            "agent": "Dr Niama",
+            "revenue": 301
           },
           {
             "agent": "M. Oussama",
-            "revenue": 233
+            "revenue": 288
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "revenue": 244
           },
           {
             "agent": "Dr. Charif",
-            "revenue": 232
+            "revenue": 203
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "revenue": 197
           }
         ],
         "kpi": {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { DashboardData } from '../types';
-import { getTypologieColorUrl } from '../utils/helpers';
 
 interface TypologieChartProps {
   /** Array of typology data containing category names and totals. */
@@ -27,21 +26,29 @@ export default function TypologieChart({ data }: TypologieChartProps) {
             margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
           >
             <defs>
-                <linearGradient id="gradTeal" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#0e677a" />
-                    <stop offset="100%" stopColor="#6bb9c8" />
-                </linearGradient>
-                <linearGradient id="gradComplaint" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#f87171" />
+                <linearGradient id="gradRed" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#991b1b" />
                     <stop offset="100%" stopColor="#ef4444" />
                 </linearGradient>
-                <linearGradient id="gradNeutral" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#60a5fa" />
+                <linearGradient id="gradBlue" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#1e3a8a" />
                     <stop offset="100%" stopColor="#3b82f6" />
                 </linearGradient>
-                <linearGradient id="gradCommercial" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#8b5cf6" />
-                    <stop offset="100%" stopColor="#a78bfa" />
+                <linearGradient id="gradYellow" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#854d0e" />
+                    <stop offset="100%" stopColor="#f59e0b" />
+                </linearGradient>
+                <linearGradient id="gradGreen" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#065f46" />
+                    <stop offset="100%" stopColor="#10b981" />
+                </linearGradient>
+                <linearGradient id="gradPurple" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#4c1d95" />
+                    <stop offset="100%" stopColor="#8b5cf6" />
+                </linearGradient>
+                <linearGradient id="gradPink" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#831843" />
+                    <stop offset="100%" stopColor="#ec4899" />
                 </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#e0e0e0" opacity={0.5} />
@@ -58,9 +65,10 @@ export default function TypologieChart({ data }: TypologieChartProps) {
                 contentStyle={{backgroundColor: '#ffffff', borderColor: '#e0e0e0', color: '#0e677a', borderRadius: '12px', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', fontSize: '12px'}}
             />
             <Bar dataKey="total" radius={[0, 12, 12, 0]} barSize={24}>
-                {data?.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={getTypologieColorUrl(entry.typologie)} />
-                ))}
+                {data?.map((_, index) => {
+                  const ids = ['url(#gradRed)','url(#gradBlue)','url(#gradYellow)','url(#gradGreen)','url(#gradPurple)','url(#gradPink)'];
+                  return <Cell key={`cell-${index}`} fill={ids[index % ids.length]} />;
+                })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
