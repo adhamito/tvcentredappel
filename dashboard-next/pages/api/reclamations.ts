@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Prisma } from '@prisma/client';
 import prisma from '../../lib/prisma';
 import { ReclamationsResponse } from '../../types';
 
@@ -15,7 +16,7 @@ export default async function handler(
   const limitNum = parseInt(limit as string, 10) || 10;
   const skip = (pageNum - 1) * limitNum;
   
-  let dateFilter: any = {};
+  let dateFilter: Prisma.reclamationsWhereInput = {};
   if (year && typeof year === 'string' && year !== 'All') {
     const yearNum = parseInt(year);
     let startDate, endDate;

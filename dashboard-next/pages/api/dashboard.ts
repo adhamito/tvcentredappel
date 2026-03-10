@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma } from '@prisma/client';
 import prisma from '../../lib/prisma';
 import { DashboardData } from '../../types';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,7 +12,34 @@ export default async function handler(
   try {
     const { year, month } = req.query;
 
-    let dateFilter: any = {};
+    const dataFilePath = path.join(process.cwd(), 'public', 'dashboardData.json');
+    try {
+      const raw = await fs.readFile(dataFilePath, 'utf8');
+      const json = JSON.parse(raw) as {
+        availableYears?: number[];
+        periods?: Record<string, Record<string, DashboardData>>;
+      };
+
+      const yearKey = typeof year === 'string' ? year : 'All';
+      const monthKey = typeof month === 'string' ? month : 'All';
+
+      const selected =
+        yearKey === 'All'
+          ? json.periods?.All?.All
+          : monthKey === 'All'
+            ? json.periods?.[yearKey]?.All
+            : json.periods?.[yearKey]?.[monthKey];
+
+      if (selected) {
+        res.status(200).json({
+          ...selected,
+          availableYears: json.availableYears ?? selected.availableYears ?? [],
+        });
+        return;
+      }
+    } catch {}
+
+    let dateFilter: Prisma.reclamationsWhereInput = {};
     let dateFilterRaw = Prisma.empty;
 
     if (year && typeof year === 'string' && year !== 'All') {
@@ -134,6 +163,8 @@ export default async function handler(
       typologie,
       ville,
       pharmacie,
+      agentVolume: [],
+      revenue: [],
       kpi: {
         totalVolume,
         globalResolutionRate,

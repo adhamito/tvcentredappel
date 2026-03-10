@@ -3,33 +3,26 @@ import Head from 'next/head';
 import useSWR from 'swr';
 import { Loader2 } from 'lucide-react';
 import DashboardHeader from '../components/DashboardHeader';
-import KPICards from '../components/KPICards';
 import TypologieChart from '../components/TypologieChart';
 import VilleChart from '../components/VilleChart';
+import AgentVolumeChart from '../components/AgentVolumeChart';
+import RevenueChart from '../components/RevenueChart';
 import PharmacieTable from '../components/PharmacieTable';
-import ReclamationsList from '../components/ReclamationsList';
-import { DashboardData, ReclamationsResponse } from '../types';
+import { DashboardData } from '../types';
 import { fetcher } from '../utils/helpers';
 
 export default function Home() {
-  const [selectedYear, setSelectedYear] = useState('All');
-  const [selectedMonth, setSelectedMonth] = useState('All');
+  const now = new Date();
+  const [selectedYear, setSelectedYear] = useState(String(now.getFullYear()));
+  const [selectedMonth, setSelectedMonth] = useState(String(now.getMonth() + 1));
 
-  const { data, error, isLoading } = useSWR<DashboardData>(
+  const { data, error } = useSWR<DashboardData>(
     `/api/dashboard?year=${selectedYear}&month=${selectedMonth}`, 
     fetcher, 
     {
       refreshInterval: 60000, // Auto-refresh every 60 seconds
     }
   );
-
-  const { data: recData, isLoading: recLoading } = useSWR<ReclamationsResponse>(
-    `/api/reclamations?limit=50&year=${selectedYear}&month=${selectedMonth}`,
-    fetcher,
-    { refreshInterval: 10000 }
-  );
-
-  const isFiltered = selectedYear !== 'All';
 
   if (error) return (
     <div className="flex h-screen w-full items-center justify-center bg-slate-50 text-red-500 font-bold">
@@ -46,12 +39,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 font-sans text-slate-800 selection:bg-[#0e677a] selection:text-white flex flex-col h-screen overflow-hidden">
       <Head>
-        <title>Centre d&apos;Appel Dashboard</title>
+        <title>Centre d&apos;Appel Intelligence Hub</title>
         <meta name="description" content="Real-time performance metrics" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="max-w-[1920px] mx-auto w-full flex flex-col h-full">
+      <main className="max-w-[1920px] mx-auto w-full flex flex-col h-full gap-4">
         <DashboardHeader 
           selectedYear={selectedYear}
           onYearChange={(year) => {
@@ -62,18 +55,26 @@ export default function Home() {
           onMonthChange={setSelectedMonth}
           availableYears={data.availableYears || []}
         />
-        
-        <KPICards data={data.kpi} isFiltered={isFiltered} />
 
-        <div className="grid grid-cols-3 gap-6 flex-1 min-h-0 w-[98%] mx-auto pb-6">
-            {/* Row 1: Charts & Tables */}
-            <TypologieChart data={data.typologie} />
-            <VilleChart data={data.ville} />
-            <PharmacieTable data={data.pharmacie} />
+        <div className="grid grid-cols-12 gap-6 flex-1 min-h-0 w-[98%] mx-auto pb-6">
+            {/* Left Quadrants (Charts) - Span 9 columns */}
+            <div className="col-span-9 grid grid-cols-2 grid-rows-2 gap-6 h-full">
+                {/* Top Left: Call Typology */}
+                <TypologieChart data={data.typologie} />
+                
+                {/* Top Right: Regional/City Distribution */}
+                <VilleChart data={data.ville} />
+                
+                {/* Bottom Left: Call Volume by Agent */}
+                <AgentVolumeChart data={data.agentVolume} />
+                
+                {/* Bottom Right: Revenue per Collaborator */}
+                <RevenueChart data={data.revenue} />
+            </div>
 
-            {/* Row 2: Detailed Reclamations List */}
-            <div className="col-span-3 flex flex-col h-full min-h-0">
-                <ReclamationsList data={recData?.data || []} isLoading={recLoading} isFiltered={isFiltered} />
+            {/* Far Right: Summary Data Table - Span 3 columns */}
+            <div className="col-span-3 h-full">
+                <PharmacieTable data={data.pharmacie} />
             </div>
         </div>
       </main>

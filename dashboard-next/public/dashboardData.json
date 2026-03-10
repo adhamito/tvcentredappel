@@ -1,0 +1,1107 @@
+{
+  "meta": {
+    "generatedAt": "2026-03-10T06:22:47.462Z",
+    "source": "excel",
+    "serviceFilter": "Centre d’appel",
+    "file": "Réclamations_Anomalies Suivi.xlsx",
+    "totalRowsInFile": 145,
+    "totalRowsAfterServiceFilter": 18
+  },
+  "availableYears": [
+    2026,
+    2025
+  ],
+  "periods": {
+    "2025": {
+      "5": {
+        "typologie": [
+          {
+            "typologie": "Refus de livraison",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Tamesna",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Boraq",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Dr. Charif",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Dr. Charif",
+            "revenue": 161
+          }
+        ],
+        "kpi": {
+          "totalVolume": 1,
+          "globalResolutionRate": 100,
+          "topIssue": "Refus de livraison"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "7": {
+        "typologie": [
+          {
+            "typologie": "Erreur de remise",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Centre Ville Rabat",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Marjane Bouregreg",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "revenue": 389
+          }
+        ],
+        "kpi": {
+          "totalVolume": 1,
+          "globalResolutionRate": 100,
+          "topIssue": "Erreur de remise"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "10": {
+        "typologie": [
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 2
+          },
+          {
+            "typologie": "Mauvaise information",
+            "total": 1
+          },
+          {
+            "typologie": "Erreur de saisie",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Tanger",
+            "total": 1
+          },
+          {
+            "ville": "Takkadoum",
+            "total": 1
+          },
+          {
+            "ville": "Sale",
+            "total": 1
+          },
+          {
+            "ville": "Temara",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Bismillah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Ste Hassania Oussaid",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Para Lasa",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Parapharmacie Rayhan",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Dr Niama",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Wafae",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "DR Yahya ",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Mme Zineb Mabrouk",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "DR Yahya ",
+            "revenue": 308
+          },
+          {
+            "agent": "Dr Niama",
+            "revenue": 279
+          },
+          {
+            "agent": "Wafae",
+            "revenue": 258
+          },
+          {
+            "agent": "Mme Zineb Mabrouk",
+            "revenue": 217
+          }
+        ],
+        "kpi": {
+          "totalVolume": 4,
+          "globalResolutionRate": 100,
+          "topIssue": "Injoignabilité centre d’appel"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "11": {
+        "typologie": [
+          {
+            "typologie": "Erreur de saisie",
+            "total": 1
+          },
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Sidi Yahya Zaers",
+            "total": 1
+          },
+          {
+            "ville": "Unknown",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Centrale Alaoui",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "plusieurs clients",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Idriss",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Zakaria",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Idriss",
+            "revenue": 285
+          },
+          {
+            "agent": "Zakaria",
+            "revenue": 282
+          }
+        ],
+        "kpi": {
+          "totalVolume": 2,
+          "globalResolutionRate": 100,
+          "topIssue": "Erreur de saisie"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "12": {
+        "typologie": [
+          {
+            "typologie": "Erreur de saisie",
+            "total": 1
+          },
+          {
+            "typologie": "Commande en ligne",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Ain Atiq",
+            "total": 1
+          },
+          {
+            "ville": "Tamesna",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Marwa",
+            "total_calls": 1,
+            "resolution_rate": 0
+          },
+          {
+            "pharmacie_name": "Pharmacie le 15 Novembre",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Zakaria",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Fatima Ezzahra",
+            "revenue": 372
+          },
+          {
+            "agent": "Zakaria",
+            "revenue": 327
+          }
+        ],
+        "kpi": {
+          "totalVolume": 2,
+          "globalResolutionRate": 50,
+          "topIssue": "Erreur de saisie"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "All": {
+        "typologie": [
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 3
+          },
+          {
+            "typologie": "Erreur de saisie",
+            "total": 3
+          },
+          {
+            "typologie": "Mauvaise information",
+            "total": 1
+          },
+          {
+            "typologie": "Refus de livraison",
+            "total": 1
+          },
+          {
+            "typologie": "Erreur de remise",
+            "total": 1
+          },
+          {
+            "typologie": "Commande en ligne",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Tamesna",
+            "total": 2
+          },
+          {
+            "ville": "Tanger",
+            "total": 1
+          },
+          {
+            "ville": "Takkadoum",
+            "total": 1
+          },
+          {
+            "ville": "Centre Ville Rabat",
+            "total": 1
+          },
+          {
+            "ville": "Ain Atiq",
+            "total": 1
+          },
+          {
+            "ville": "Sidi Yahya Zaers",
+            "total": 1
+          },
+          {
+            "ville": "Sale",
+            "total": 1
+          },
+          {
+            "ville": "Temara",
+            "total": 1
+          },
+          {
+            "ville": "Unknown",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Bismillah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Boraq",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Ste Hassania Oussaid",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Marjane Bouregreg",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Marwa",
+            "total_calls": 1,
+            "resolution_rate": 0
+          },
+          {
+            "pharmacie_name": "Pharmacie le 15 Novembre",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Centrale Alaoui",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Para Lasa",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Parapharmacie Rayhan",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "plusieurs clients",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Zakaria",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Dr Niama",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "Dr. Charif",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Wafae",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Idriss",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "DR Yahya ",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Mme Zineb Mabrouk",
+            "inbound": 0,
+            "outbound": 1
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Zakaria",
+            "revenue": 788
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "revenue": 380
+          },
+          {
+            "agent": "Mme Zineb Mabrouk",
+            "revenue": 369
+          },
+          {
+            "agent": "Idriss",
+            "revenue": 367
+          },
+          {
+            "agent": "Dr Niama",
+            "revenue": 352
+          },
+          {
+            "agent": "DR Yahya ",
+            "revenue": 343
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "revenue": 277
+          },
+          {
+            "agent": "Wafae",
+            "revenue": 266
+          },
+          {
+            "agent": "Dr. Charif",
+            "revenue": 261
+          }
+        ],
+        "kpi": {
+          "totalVolume": 10,
+          "globalResolutionRate": 90,
+          "topIssue": "Injoignabilité centre d’appel"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      }
+    },
+    "2026": {
+      "1": {
+        "typologie": [
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 5
+          },
+          {
+            "typologie": "Commande en ligne",
+            "total": 1
+          },
+          {
+            "typologie": "Erreur de saisie",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Ain Atiq",
+            "total": 3
+          },
+          {
+            "ville": "Temara",
+            "total": 2
+          },
+          {
+            "ville": "Centre Ville Rabat",
+            "total": 1
+          },
+          {
+            "ville": "Ain Aouda",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmcie Saydaliyaty",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Jnane Fouarat",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie la paix",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fadel Allah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fath Ain Attiq",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Mabrouka",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie les parents",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Dr Yahya",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "M Adnane",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Idriss",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "M. Oussama",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "M. Adnane",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "M Adnane",
+            "revenue": 744
+          },
+          {
+            "agent": "Dr Yahya",
+            "revenue": 692
+          },
+          {
+            "agent": "M. Oussama",
+            "revenue": 284
+          },
+          {
+            "agent": "M. Adnane",
+            "revenue": 283
+          },
+          {
+            "agent": "Idriss",
+            "revenue": 247
+          }
+        ],
+        "kpi": {
+          "totalVolume": 7,
+          "globalResolutionRate": 100,
+          "topIssue": "Injoignabilité centre d’appel"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "2": {
+        "typologie": [
+          {
+            "typologie": "Réclamation prix",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Kenitra",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Fadl Allah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "DR Yahya",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "DR Yahya",
+            "revenue": 226
+          }
+        ],
+        "kpi": {
+          "totalVolume": 1,
+          "globalResolutionRate": 100,
+          "topIssue": "Réclamation prix"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      },
+      "All": {
+        "typologie": [
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 5
+          },
+          {
+            "typologie": "Commande en ligne",
+            "total": 1
+          },
+          {
+            "typologie": "Erreur de saisie",
+            "total": 1
+          },
+          {
+            "typologie": "Réclamation prix",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Ain Atiq",
+            "total": 3
+          },
+          {
+            "ville": "Temara",
+            "total": 2
+          },
+          {
+            "ville": "Centre Ville Rabat",
+            "total": 1
+          },
+          {
+            "ville": "Ain Aouda",
+            "total": 1
+          },
+          {
+            "ville": "Kenitra",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmcie Saydaliyaty",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Jnane Fouarat",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie la paix",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fadel Allah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fath Ain Attiq",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Mabrouka",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie les parents",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fadl Allah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Dr Yahya",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "M Adnane",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Idriss",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "M. Oussama",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "M. Adnane",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "DR Yahya",
+            "inbound": 0,
+            "outbound": 1
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "M Adnane",
+            "revenue": 800
+          },
+          {
+            "agent": "Dr Yahya",
+            "revenue": 636
+          },
+          {
+            "agent": "DR Yahya",
+            "revenue": 339
+          },
+          {
+            "agent": "M. Adnane",
+            "revenue": 327
+          },
+          {
+            "agent": "Idriss",
+            "revenue": 298
+          },
+          {
+            "agent": "M. Oussama",
+            "revenue": 160
+          }
+        ],
+        "kpi": {
+          "totalVolume": 8,
+          "globalResolutionRate": 100,
+          "topIssue": "Injoignabilité centre d’appel"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      }
+    },
+    "All": {
+      "All": {
+        "typologie": [
+          {
+            "typologie": "Injoignabilité centre d’appel",
+            "total": 8
+          },
+          {
+            "typologie": "Erreur de saisie",
+            "total": 4
+          },
+          {
+            "typologie": "Commande en ligne",
+            "total": 2
+          },
+          {
+            "typologie": "Mauvaise information",
+            "total": 1
+          },
+          {
+            "typologie": "Refus de livraison",
+            "total": 1
+          },
+          {
+            "typologie": "Erreur de remise",
+            "total": 1
+          },
+          {
+            "typologie": "Réclamation prix",
+            "total": 1
+          }
+        ],
+        "ville": [
+          {
+            "ville": "Ain Atiq",
+            "total": 4
+          },
+          {
+            "ville": "Temara",
+            "total": 3
+          },
+          {
+            "ville": "Centre Ville Rabat",
+            "total": 2
+          },
+          {
+            "ville": "Tamesna",
+            "total": 2
+          },
+          {
+            "ville": "Tanger",
+            "total": 1
+          },
+          {
+            "ville": "Takkadoum",
+            "total": 1
+          },
+          {
+            "ville": "Sidi Yahya Zaers",
+            "total": 1
+          },
+          {
+            "ville": "Sale",
+            "total": 1
+          },
+          {
+            "ville": "Unknown",
+            "total": 1
+          },
+          {
+            "ville": "Ain Aouda",
+            "total": 1
+          }
+        ],
+        "pharmacie": [
+          {
+            "pharmacie_name": "Pharmacie Bismillah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmcie Saydaliyaty",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Boraq",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Ste Hassania Oussaid",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Marjane Bouregreg",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Marwa",
+            "total_calls": 1,
+            "resolution_rate": 0
+          },
+          {
+            "pharmacie_name": "Pharmacie Jnane Fouarat",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie la paix",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie le 15 Novembre",
+            "total_calls": 1,
+            "resolution_rate": 100
+          },
+          {
+            "pharmacie_name": "Pharmacie Fadel Allah",
+            "total_calls": 1,
+            "resolution_rate": 100
+          }
+        ],
+        "agentVolume": [
+          {
+            "agent": "Dr Yahya",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Zakaria",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "M Adnane",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Idriss",
+            "inbound": 1,
+            "outbound": 1
+          },
+          {
+            "agent": "Dr Niama",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Dr. Charif",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "Wafae",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "inbound": 1,
+            "outbound": 0
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "inbound": 0,
+            "outbound": 1
+          },
+          {
+            "agent": "M. Oussama",
+            "inbound": 1,
+            "outbound": 0
+          }
+        ],
+        "revenue": [
+          {
+            "agent": "Idriss",
+            "revenue": 802
+          },
+          {
+            "agent": "Dr Yahya",
+            "revenue": 684
+          },
+          {
+            "agent": "Zakaria",
+            "revenue": 438
+          },
+          {
+            "agent": "Mme. Fatima Ezzahra",
+            "revenue": 389
+          },
+          {
+            "agent": "M Adnane",
+            "revenue": 336
+          },
+          {
+            "agent": "Fatima Ezzahra",
+            "revenue": 335
+          },
+          {
+            "agent": "Dr Niama",
+            "revenue": 314
+          },
+          {
+            "agent": "Wafae",
+            "revenue": 251
+          },
+          {
+            "agent": "M. Oussama",
+            "revenue": 233
+          },
+          {
+            "agent": "Dr. Charif",
+            "revenue": 232
+          }
+        ],
+        "kpi": {
+          "totalVolume": 18,
+          "globalResolutionRate": 94,
+          "topIssue": "Injoignabilité centre d’appel"
+        },
+        "availableYears": [
+          2026,
+          2025
+        ]
+      }
+    }
+  }
+}

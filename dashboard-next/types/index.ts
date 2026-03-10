@@ -11,6 +11,12 @@ export interface DashboardData {
   
   /** Aggregated call statistics per pharmacy. */
   pharmacie: { pharmacie_name: string; total_calls: number; resolution_rate: number }[];
+
+  /** Call volume by agent (Inbound vs Outbound). */
+  agentVolume: { agent: string; inbound: number; outbound: number }[];
+
+  /** Revenue per collaborator (Leaderboard). */
+  revenue: { agent: string; revenue: number }[];
   
   /** Key Performance Indicators for the hero section. */
   kpi: {

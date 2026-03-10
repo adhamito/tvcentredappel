@@ -21,9 +21,9 @@ export default function PharmacieTable({ data }: PharmacieTableProps) {
         <table className="min-w-full">
           <thead className="sticky top-0 z-10 bg-white border-b border-[#e0e0e0]">
             <tr>
-              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Pharmacie</th>
-              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Appels</th>
-              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Taux</th>
+              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Pharmacy Name</th>
+              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Total Volume</th>
+              <th scope="col" className="px-4 py-3 text-left text-[10px] font-bold text-[#5a5a5a] uppercase tracking-widest">Conversion Rate</th>
             </tr>
           </thead>
           <tbody className="bg-transparent">
