@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { DashboardData } from '../types';
 
 interface TypologieChartProps {
@@ -8,69 +8,91 @@ interface TypologieChartProps {
 }
 
 /**
- * A vertical bar chart displaying call volume by typology (category).
- * Uses semantic gradients based on the typology name (e.g., red for complaints).
+ * A sleek Radar Chart displaying call volume by typology (category) 
+ * for a high-tech "Command Center" look.
  */
 export default function TypologieChart({ data }: TypologieChartProps) {
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-md border-0 flex flex-col h-full min-h-0 relative overflow-hidden">
-      <h2 className="mb-4 text-lg font-bold text-[#5a5a5a] shrink-0 flex items-center uppercase tracking-wider">
-        <span className="bg-[#0e677a] w-1.5 h-6 mr-3 rounded-full shadow-sm"></span>
-        Typologie (Call Categorization)
+    <div className="rounded-[24px] bg-white/40 backdrop-blur-3xl shadow-[0_10px_30px_-10px_rgba(14,103,122,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border border-white/20 border-t-[1px] border-t-white/30 p-6 flex flex-col h-full min-h-0 relative overflow-hidden">
+      <h2 className="mb-4 text-2xl font-semibold text-slate-700 shrink-0 flex items-center uppercase tracking-[0.1em]">
+        <span className="bg-[#0e677a] w-2 h-6 mr-3 rounded-full shadow-sm"></span>
+        Typologie
       </h2>
       <div className="flex-1 w-full min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            layout="vertical"
-            data={data}
-            margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
-          >
-            <defs>
-                <linearGradient id="gradRed" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#991b1b" />
-                    <stop offset="100%" stopColor="#ef4444" />
-                </linearGradient>
-                <linearGradient id="gradBlue" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#1e3a8a" />
-                    <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-                <linearGradient id="gradYellow" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#854d0e" />
-                    <stop offset="100%" stopColor="#f59e0b" />
-                </linearGradient>
-                <linearGradient id="gradGreen" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#065f46" />
-                    <stop offset="100%" stopColor="#10b981" />
-                </linearGradient>
-                <linearGradient id="gradPurple" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#4c1d95" />
-                    <stop offset="100%" stopColor="#8b5cf6" />
-                </linearGradient>
-                <linearGradient id="gradPink" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#831843" />
-                    <stop offset="100%" stopColor="#ec4899" />
-                </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#e0e0e0" opacity={0.5} />
-            <XAxis type="number" hide />
-            <YAxis 
-                dataKey="typologie" 
-                type="category" 
-                width={180} 
-                tick={{fontSize: 10, fill: '#5a5a5a', fontWeight: 600}} 
-                interval={0}
-            />
+          <PieChart margin={{ top: 10, right: 20, bottom: 10, left: 20 }}>
             <Tooltip 
-                cursor={{fill: '#f0f2f5', opacity: 0.4}} 
-                contentStyle={{backgroundColor: '#ffffff', borderColor: '#e0e0e0', color: '#0e677a', borderRadius: '12px', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', fontSize: '12px'}}
+              contentStyle={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                backdropFilter: 'blur(10px)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.5)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                fontWeight: 600,
+                color: '#334155'
+              }}
+              itemStyle={{ color: '#0f172a', fontWeight: 700 }}
+              formatter={(value: any, name: any) => [`${value} appels`, String(name)]}
             />
-            <Bar dataKey="total" radius={[0, 12, 12, 0]} barSize={24}>
-                {data?.map((_, index) => {
-                  const ids = ['url(#gradRed)','url(#gradBlue)','url(#gradYellow)','url(#gradGreen)','url(#gradPurple)','url(#gradPink)'];
-                  return <Cell key={`cell-${index}`} fill={ids[index % ids.length]} />;
-                })}
-            </Bar>
-          </BarChart>
+            <Pie
+              data={data}
+              dataKey="total"
+              nameKey="typologie"
+              cx="50%"
+              cy="45%"
+              innerRadius="50%"
+              outerRadius="75%"
+              paddingAngle={5}
+              label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }) => {
+                if (!percent || percent < 0.04 || midAngle === undefined) return null;
+                const RADIAN = Math.PI / 180;
+                const radius = outerRadius * 1.25;
+                const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
+                const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
+                
+                return (
+                  <text 
+                    x={x} 
+                    y={y} 
+                    fill="#475569" 
+                    textAnchor={x > Number(cx) ? 'start' : 'end'} 
+                    dominantBaseline="central"
+                    fontSize={30}
+                    fontWeight={800}
+                  >
+                    {`${(percent * 100).toFixed(0)}%`}
+                  </text>
+                );
+              }}
+              labelLine={false}
+            >
+              {data.map((entry, index) => {
+                const colors = ['#0e677a', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
+                return (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={colors[index % colors.length]} 
+                    style={{ filter: `drop-shadow(0 0 8px ${colors[index % colors.length]}60)` }} 
+                  />
+                );
+              })}
+            </Pie>
+            <Legend
+                verticalAlign="bottom"
+                align="center"
+                iconType="circle"
+                wrapperStyle={{
+                  paddingTop: '5px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  color: '#475569',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+            />
+          </PieChart>
         </ResponsiveContainer>
       </div>
     </div>

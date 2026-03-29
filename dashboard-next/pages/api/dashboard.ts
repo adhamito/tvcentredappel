@@ -7,11 +7,13 @@ export default async function handler(
   res: NextApiResponse<DashboardData | { error: string }>
 ) {
   try {
-    const { year, month } = req.query;
+    const { year, month, service } = req.query;
     const yearKey = typeof year === 'string' ? year : 'All';
     const monthKey = typeof month === 'string' ? month : 'All';
+    const serviceKey = typeof service === 'string' ? service : 'Centre d’appel';
 
     const result = excelDashboardData.loadDashboardData({
+      service: serviceKey,
       year: yearKey,
       month: monthKey,
       ttlMs: 60000,

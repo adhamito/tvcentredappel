@@ -27,6 +27,40 @@ export interface DashboardData {
   
   /** Available years for filtering */
   availableYears: number[];
+
+  availableServices?: string[];
+
+  /** Weekly-focused metrics for productivity and logistics */
+  weekly?: {
+    /** Week labels for the current filter scope (e.g., W1…W5) */
+    weeks: string[];
+    /** Per-collaborator BL volume series aligned with weeks */
+    volumeByAgent: { agent: string; series: number[] }[];
+    /** Lines processed per week aligned with weeks */
+    linesPerWeek: number[];
+    /** In/Out status per week */
+    statusInOut: { week: string; inbound: number; outbound: number }[];
+    /** Total complaints in the filtered period */
+    complaintsCount: number;
+    /** Injection/input count proxy */
+    injCount: number;
+
+    openCount?: number;
+    highUrgencyCount?: number;
+  };
+
+  recent?: {
+    id: string;
+    date: string;
+    source: string;
+    typologie: string;
+    client: string;
+    ville: string;
+    status: string;
+    urgence: string;
+    agentName?: string;
+    duration?: string;
+  }[];
 }
 
 /**
@@ -41,6 +75,10 @@ export interface Reclamation {
   ville: string;
   status: string;
   cloture: boolean;
+  urgence?: string;
+  source?: string;
+  agentName?: string;
+  duration?: string;
 }
 
 /**

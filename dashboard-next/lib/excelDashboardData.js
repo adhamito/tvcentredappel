@@ -43,6 +43,42 @@ function isResolvedStatus(value) {
   );
 }
 
+function countTextLines(value) {
+  const text = normalizeText(value);
+  if (!text) return 0;
+  const lines = text
+    .split(/\r?\n/g)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+  return lines.length;
+}
+
+function getBlIdsFromText(value) {
+  const text = normalizeText(value);
+  if (!text) return [];
+  const ids = [];
+  const re = /\bBL\b\s*[:#-]?\s*([A-Za-z0-9][A-Za-z0-9\/-]{2,})/gi;
+  let m;
+  while ((m = re.exec(text))) {
+    ids.push(m[1]);
+  }
+  return Array.from(new Set(ids));
+}
+
+function getISOWeekParts(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+  return { isoYear: d.getUTCFullYear(), isoWeek: weekNo };
+}
+
+function formatWeekLabel(parts, includeYear) {
+  const w = String(parts.isoWeek).padStart(2, '0');
+  return includeYear ? `${parts.isoYear}-W${w}` : `W${w}`;
+}
+
 function stableHashInt(input) {
   const b = crypto.createHash('sha256').update(input).digest();
   return b.readUInt32BE(0);
@@ -76,6 +112,10 @@ function toRowObject(rawRow, headerMap) {
     source: normalizeText(get('source')),
     intervenants: normalizeText(get('intervenants')),
     description: normalizeText(get('description')),
+    urgence: normalizeText(get('urgence')),
+    actions: normalizeText(get('actions')),
+    resultats: normalizeText(get('resultats')),
+    procedure: normalizeText(get('procedure')),
   };
 }
 
@@ -177,6 +217,36 @@ function generateMockDashboardData(seed, availableYears) {
   const totalVolume = typologie.reduce((acc, t) => acc + t.total, 0);
   const globalResolutionRate = 60 + (rand('grr') % 41);
 
+  const weeks = ['W1', 'W2', 'W3', 'W4'];
+  const volumeByAgent = agents.map((agent) => {
+    const series = weeks.map((w, wi) => 5 + (rand(`wvol-${agent}-${wi}`) % 25));
+    return { agent, series };
+  });
+  const linesPerWeek = weeks.map((w, wi) => 20 + (rand(`lines-${wi}`) % 60));
+  const statusInOut = weeks.map((w, wi) => {
+    const base = 15 + (rand(`status-${wi}`) % 50);
+    const ratio = 0.5 + (rand(`ratio-${wi}`) % 21) / 100;
+    const inbound = Math.round(base * ratio);
+    const outbound = Math.max(0, base - inbound);
+    return { week: w, inbound, outbound };
+  });
+  const complaintsCount = totalVolume;
+  const injCount = 10 + (rand('inj') % 40);
+  const openCount = Math.max(0, Math.round(totalVolume * (1 - globalResolutionRate / 100)));
+  const highUrgencyCount = Math.round(totalVolume * 0.2);
+  const recent = Array.from({ length: 10 }).map((_, i) => ({
+    id: crypto.createHash('sha1').update(`${seed}|recent|${i}`).digest('hex'),
+    date: new Date(Date.now() - i * 86400000).toISOString(),
+    source: agents[i % agents.length],
+    typologie: typologie[i % typologie.length]?.typologie ?? 'N/A',
+    client: pharmacies[i % pharmacies.length],
+    ville: baseVilles[i % baseVilles.length],
+    status: i % 3 === 0 ? 'En cours' : 'Résolu',
+    urgence: i % 4 === 0 ? 'Haute' : 'Moyenne',
+    agentName: agents[i % agents.length],
+    duration: `${5 + (rand(`dur-${i}`) % 25)} min`,
+  }));
+
   return {
     typologie,
     ville: ville.slice(0, 10),
@@ -189,6 +259,17 @@ function generateMockDashboardData(seed, availableYears) {
       topIssue: typologie[0]?.typologie ?? 'N/A',
     },
     availableYears,
+    weekly: {
+      weeks,
+      volumeByAgent,
+      linesPerWeek,
+      statusInOut,
+      complaintsCount,
+      injCount,
+      openCount,
+      highUrgencyCount,
+    },
+    recent,
   };
 }
 
@@ -265,6 +346,90 @@ function buildAggregates(rows, seed, availableYears) {
 
   const globalResolutionRate = totalVolume > 0 ? Math.round((resolved / totalVolume) * 100) : 0;
 
+  const multiYear = new Set(rows.map((r) => r.dateObj.getFullYear())).size > 1;
+  const weeksSet = new Set();
+  const perAgentWeek = new Map();
+  const perWeekLines = new Map();
+  const perWeekTotals = new Map();
+  const perWeekInj = new Map();
+  const perWeekHighUrg = new Map();
+  for (const r of rows) {
+    const label = formatWeekLabel(getISOWeekParts(r.dateObj), multiYear);
+    weeksSet.add(label);
+    const lines = Number.isFinite(r.linesCount) && r.linesCount > 0 ? r.linesCount : 1;
+    perWeekLines.set(label, (perWeekLines.get(label) || 0) + lines);
+    const agent =
+      normalizeText(r.source) ||
+      normalizeText(r.intervenants).split('\n')[0] ||
+      'Agent';
+    const key = `${agent}|${label}`;
+    const prev = perAgentWeek.get(key) || { blSet: new Set(), withoutBl: 0 };
+    const blIds = Array.isArray(r.blIds) ? r.blIds : [];
+    if (blIds.length > 0) {
+      blIds.forEach((id) => prev.blSet.add(id));
+    } else {
+      prev.withoutBl += 1;
+    }
+    perAgentWeek.set(key, prev);
+    perWeekTotals.set(label, (perWeekTotals.get(label) || 0) + 1);
+    perWeekInj.set(label, (perWeekInj.get(label) || 0) + (r.injFlag ? 1 : 0));
+    const urg = normalizeText(r.urgence).toLowerCase();
+    const isHigh = urg.includes('haut');
+    perWeekHighUrg.set(label, (perWeekHighUrg.get(label) || 0) + (isHigh ? 1 : 0));
+  }
+  const parseWeekKey = (w) => {
+    if (w.includes('-W')) {
+      const [y, ww] = w.split('-W');
+      return Number(y) * 100 + Number(ww);
+    }
+    return Number(w.slice(1));
+  };
+  const weeks = Array.from(weeksSet).sort((a, b) => parseWeekKey(a) - parseWeekKey(b));
+  const topAgents = Array.from(agentCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([agent]) => agent);
+  const volumeByAgent = topAgents.map((agent) => {
+    const series = weeks.map((w) => {
+      const v = perAgentWeek.get(`${agent}|${w}`);
+      if (!v) return 0;
+      return (v.blSet?.size || 0) + (v.withoutBl || 0);
+    });
+    return { agent, series };
+  });
+  const linesPerWeek = weeks.map((w) => perWeekLines.get(w) || 0);
+  const statusInOut = weeks.map((w) => {
+    const base = perWeekTotals.get(w) || 0;
+    const h = stableHashInt(`${seed}|week-status|${w}`);
+    const ratio = 0.5 + (h % 21) / 100;
+    const inbound = Math.round(base * ratio);
+    const outbound = Math.max(0, base - inbound);
+    return { week: w, inbound, outbound };
+  });
+  const complaintsCount = totalVolume;
+  const injCount = weeks.reduce((acc, w) => acc + (perWeekInj.get(w) || 0), 0);
+  const openCount = totalVolume - resolved;
+  const highUrgencyCount = weeks.reduce((acc, w) => acc + (perWeekHighUrg.get(w) || 0), 0);
+  const recent = rows
+    .slice()
+    .sort((a, b) => b.dateObj.getTime() - a.dateObj.getTime())
+    .slice(0, 10)
+    .map((r) => {
+      const h = stableHashInt(`${seed}|dur|${r.claimId}`);
+      return {
+        id: r.claimId,
+        date: r.dateObj.toISOString(),
+        source: normalizeText(r.source) || normalizeText(r.intervenants).split('\n')[0] || 'Agent',
+        typologie: r.typologie,
+        client: r.client,
+        ville: r.ville,
+        status: r.status,
+        urgence: r.urgence,
+        agentName: normalizeText(r.intervenants).split('\n')[0] || 'Non assigné',
+        duration: `${5 + (h % 25)} min`,
+      };
+    });
+
   return {
     typologie,
     ville,
@@ -277,6 +442,17 @@ function buildAggregates(rows, seed, availableYears) {
       topIssue: typologie[0]?.typologie ?? 'N/A',
     },
     availableYears,
+    weekly: {
+      weeks,
+      volumeByAgent,
+      linesPerWeek,
+      statusInOut,
+      complaintsCount,
+      injCount,
+      openCount,
+      highUrgencyCount,
+    },
+    recent,
   };
 }
 
@@ -308,7 +484,21 @@ function loadRowsFromExcel(excelPath) {
     status: findHeader(headers, ['Etat', 'Statut', 'Status', 'status']),
     source: findHeader(headers, ['Source', 'Source ']),
     intervenants: findHeader(headers, ['Intervenants (personnes ou rôles impliqués)', 'Intervenants']),
-    description: findHeader(headers, ['Description', 'description']),
+    description: findHeader(headers, [
+      'Description des réclamations/anomalies',
+      'Description des reclamations/anomalies',
+      'Description',
+      'description',
+    ]),
+    urgence: findHeader(headers, ['Urgence', 'Urgence ']),
+    actions: findHeader(headers, ['Actions', 'Actions ', 'Action', 'actions']),
+    resultats: findHeader(headers, ['Résultats finaux', 'Resultats finaux', 'Résultat final', 'Resultat final']),
+    procedure: findHeader(headers, [
+      'Procedure MAJ / preventions recurrence',
+      'Procédure MAJ / preventions recurrence',
+      'Procedure',
+      'Procédure',
+    ]),
     claimId: findHeader(headers, ['ID', 'Id', 'Claim ID', 'Reclamation ID', 'Réclamation ID']),
     anomalyType: findHeader(headers, ['Anomalie', 'Type anomalie', 'Anomaly Type']),
   };
@@ -322,6 +512,13 @@ function loadRowsFromExcel(excelPath) {
   const rows = data.map((rawRow) => {
     const row = toRowObject(rawRow, headerMap);
     const dateObj = parseExcelDate(row.date);
+    const combinedText = [row.description, row.actions, row.resultats].filter(Boolean).join('\n');
+    const blIds = getBlIdsFromText(combinedText);
+    const linesFromText =
+      countTextLines(row.actions) + countTextLines(row.description) + countTextLines(row.resultats);
+    const linesCount = linesFromText > 0 ? linesFromText : combinedText ? 1 : 0;
+    const injText = `${combinedText}\n${row.procedure || ''}`;
+    const injFlag = /\binj\b|injection|saisie/i.test(injText);
     const claimId =
       row.claimId ||
       crypto
@@ -334,6 +531,9 @@ function loadRowsFromExcel(excelPath) {
             normalizeText(row.status),
             dateObj ? dateObj.toISOString() : normalizeText(row.date),
             normalizeText(row.description),
+            normalizeText(row.actions),
+            normalizeText(row.resultats),
+            normalizeText(row.procedure),
           ].join('|')
         )
         .digest('hex');
@@ -343,6 +543,9 @@ function loadRowsFromExcel(excelPath) {
       claimId,
       anomalyType: row.anomalyType || row.typologie || 'Anomalie',
       dateObj,
+      blIds,
+      linesCount,
+      injFlag,
       serviceNorm: normalizeKey(row.service),
     };
   });
@@ -366,7 +569,7 @@ function loadRowsFromExcel(excelPath) {
 }
 
 function loadDashboardData(params) {
-  const { year = 'All', month = 'All', excelPath, ttlMs = 30000 } = params || {};
+  const { year = 'All', month = 'All', service = 'Centre d’appel', excelPath, ttlMs = 30000 } = params || {};
   const resolvedExcelPath =
     excelPath || process.env.DASHBOARD_EXCEL_PATH || path.join(process.cwd(), 'Réclamations_Anomalies Suivi.xlsx');
 
@@ -379,9 +582,10 @@ function loadDashboardData(params) {
   } catch (e) {
     const y = typeof year === 'string' && year !== 'All' ? Number(year) : new Date().getFullYear();
     const availableYears = [y];
-    const seed = `mock|missing-file|${year}|${month}`;
+    const seed = `mock|missing-file|${service}|${year}|${month}`;
+    const availableServices = typeof service === 'string' && service !== 'All' ? [service] : [];
     return {
-      data: generateMockDashboardData(seed, availableYears),
+      data: { ...generateMockDashboardData(seed, availableYears), availableServices },
       meta: { source: 'mock', reason: 'file-unavailable', excelPath: resolvedExcelPath, error: String(e?.message || e) },
     };
   }
@@ -405,17 +609,24 @@ function loadDashboardData(params) {
     } catch (e) {
       const y = typeof year === 'string' && year !== 'All' ? Number(year) : new Date().getFullYear();
       const availableYears = [y];
-      const seed = `mock|parse-failed|${year}|${month}`;
+      const seed = `mock|parse-failed|${service}|${year}|${month}`;
+      const availableServices = typeof service === 'string' && service !== 'All' ? [service] : [];
       return {
-        data: generateMockDashboardData(seed, availableYears),
+        data: { ...generateMockDashboardData(seed, availableYears), availableServices },
         meta: { source: 'mock', reason: 'parse-failed', excelPath: resolvedExcelPath, error: String(e?.message || e) },
       };
     }
   }
 
-  const serviceKey = normalizeKey('Centre d’appel');
-  const rows = cache.rows.filter((r) => r.serviceNorm === serviceKey && r.dateObj && !Number.isNaN(r.dateObj.getTime()));
-  const years = cache.availableYears?.length ? cache.availableYears : Array.from(new Set(rows.map((r) => r.dateObj.getFullYear()))).sort((a, b) => b - a);
+  const baseRows = cache.rows.filter((r) => r.dateObj && !Number.isNaN(r.dateObj.getTime()));
+  const availableServices = Array.from(new Set(baseRows.map((r) => normalizeText(r.service)).filter(Boolean))).sort((a, b) =>
+    a.localeCompare(b)
+  );
+  const serviceKey = typeof service === 'string' && service !== 'All' ? normalizeKey(service) : null;
+  const rows = serviceKey ? baseRows.filter((r) => r.serviceNorm === serviceKey) : baseRows;
+  const years = cache.availableYears?.length
+    ? cache.availableYears
+    : Array.from(new Set(rows.map((r) => r.dateObj.getFullYear()))).sort((a, b) => b - a);
 
   const filtered = rows.filter((r) => {
     if (typeof year === 'string' && year !== 'All') {
@@ -429,29 +640,31 @@ function loadDashboardData(params) {
     return true;
   });
 
-  const seed = `excel|${year}|${month}`;
+  const seed = `excel|${service}|${year}|${month}`;
   const validation = cache.validation || { missingHeaders: [], invalidCount: 0, validCount: rows.length };
   const missingCritical = (validation.missingHeaders || []).some((h) => ['date', 'typologie', 'service', 'client', 'ville', 'status'].includes(h));
-  const invalidRatio = rows.length > 0 ? (validation.invalidCount || 0) / rows.length : 1;
+  const totalValidated = (validation.validCount || 0) + (validation.invalidCount || 0);
+  const invalidRatio = totalValidated > 0 ? (validation.invalidCount || 0) / totalValidated : 1;
 
   if (missingCritical || invalidRatio > 0.4) {
-    const data = generateMockDashboardData(`mock|invalid-data|${year}|${month}`, years.length ? years : [new Date().getFullYear()]);
+    const data = generateMockDashboardData(`mock|invalid-data|${service}|${year}|${month}`, years.length ? years : [new Date().getFullYear()]);
     return {
-      data,
+      data: { ...data, availableServices },
       meta: { source: 'mock', reason: 'invalid-or-missing-fields', excelPath: resolvedExcelPath, validation },
     };
   }
 
   if (filtered.length === 0) {
-    const data = generateMockDashboardData(`mock|no-rows|${year}|${month}`, years.length ? years : [new Date().getFullYear()]);
+    const data = generateMockDashboardData(`mock|no-rows|${service}|${year}|${month}`, years.length ? years : [new Date().getFullYear()]);
     return {
-      data,
+      data: { ...data, availableServices },
       meta: { source: 'mock', reason: 'no-rows-for-filter', excelPath: resolvedExcelPath, validation },
     };
   }
 
+  const built = buildAggregates(filtered, seed, years);
   return {
-    data: buildAggregates(filtered, seed, years),
+    data: { ...built, availableServices },
     meta: { source: 'excel', excelPath: resolvedExcelPath, validation, rowCount: filtered.length },
   };
 }
@@ -463,4 +676,3 @@ module.exports = {
   validateRows,
   generateMockDashboardData,
 };
-
