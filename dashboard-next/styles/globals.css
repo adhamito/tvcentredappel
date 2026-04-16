@@ -1,8 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light only;
+  /* Light glass palette */
+  --background: #F1F5F9;
+  --background-soft: #F8FAFC;
+  --foreground: #0F172A;
+  --foreground-muted: #64748B;
+  --foreground-dim: #94A3B8;
+
+  /* Frosted glass surface (white + subtle tint) */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(15, 23, 42, 0.06);
+  --glass-border-strong: rgba(15, 23, 42, 0.12);
+  --glass-divider: rgba(15, 23, 42, 0.06);
+
+  /* Accents */
+  --action: #0D9488;
+  --action-soft: #14B8A6;
+  --action-tint: rgba(13, 148, 136, 0.1);
+  --accent-secondary: #6366F1;
+  --danger: #DC2626;
+  --warning: #F59E0B;
+  --warning-soft: #FEF3C7;
+  --warning-border: #FDE68A;
+  --focus-ring: #0E677A;
+  --success: #059669;
+
+  --radius: 14px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 html, body, #__next {
@@ -10,6 +44,8 @@ html, body, #__next {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 html {
@@ -17,9 +53,6 @@ html {
   transition: font-size 0.3s ease;
 }
 
-/* Dynamically scale the root font size based on the zoom level 
-   so that all Tailwind rem-based utilities scale up proportionally, 
-   while allowing the layout to utilize the expanded viewport space. */
 html.zoom-scaled {
   font-size: calc(16px * var(--scale-factor, 2));
 }
@@ -37,15 +70,167 @@ html.zoom-scaled {
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(1200px 700px at 10% -10%, rgba(13, 148, 136, 0.08), transparent 60%),
+    radial-gradient(900px 600px at 100% 0%, rgba(99, 102, 241, 0.08), transparent 60%),
+    var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
+
+/* ─── Glass Card (shadcn-style Card pattern) ─── */
+.dash-card,
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.dash-card:hover,
+.glass-card:hover {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* Glass Badge (shadcn-style Badge pattern) */
+.glass-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--foreground-muted);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.glass-badge.glass-badge-accent {
+  background: var(--action-tint);
+  border-color: rgba(13, 148, 136, 0.28);
+  color: var(--action);
+}
+.glass-badge.glass-badge-warning {
+  background: var(--warning-soft);
+  border-color: var(--warning-border);
+  color: #B45309;
+}
+
+/* Action chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--foreground-muted);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.chip:hover {
+  border-color: var(--glass-border-strong);
+  color: #334155;
+}
+.chip:focus-visible {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px rgba(14, 103, 122, 0.2);
+}
+.chip.chip-active {
+  background: var(--action-tint);
+  border-color: rgba(13, 148, 136, 0.35);
+  color: var(--action);
+}
+
+/* Breathing live dot — slow, rhythmic opacity */
+@keyframes live-breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45); }
+  50% { opacity: 0.45; box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
+}
+.live-dot {
+  animation: live-breathe 2.6s ease-in-out infinite;
+}
+
+/* Chart tooltip — light glass */
+.chart-tooltip {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  padding: 0.55rem 0.7rem;
+  min-width: 140px;
+  font-size: 0.7rem;
+  color: #334155;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.chart-tooltip-title {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.72rem;
+  margin-bottom: 0.3rem;
+}
+.chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.12rem 0;
+}
+.chart-tooltip-row .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--foreground-muted);
+  font-weight: 500;
+}
+.chart-tooltip-row .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  display: inline-block;
+}
+.chart-tooltip-row .value {
+  font-weight: 600;
+  color: #0F172A;
+}
+.chart-tooltip-sub {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed var(--glass-border);
+  color: var(--foreground-muted);
+  font-size: 0.65rem;
 }

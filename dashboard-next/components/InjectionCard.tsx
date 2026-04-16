@@ -1,34 +1,50 @@
 import React from 'react';
-import { Syringe, TrendingUp } from 'lucide-react';
+import { Syringe, TrendingUp, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   count: number;
 }
 
 export default function InjectionCard({ count }: Props) {
-  return (
-    <div className="flex flex-col h-full relative overflow-hidden group py-1">
-        <div className="absolute top-0 right-0 opacity-[0.03] pointer-events-none">
-            <Syringe className="w-[8rem] h-[8rem] text-[#4f46e5] scale-150 opacity-90" />
-        </div>
-        <div className="flex items-center justify-between mb-2 relative z-10">
-            <h3 className="text-sm font-black text-slate-700 uppercase tracking-[0.1em] flex items-center">
-                <Syringe className="w-4 h-4 mr-3 text-[#4f46e5] scale-150 opacity-90" />
-                INJECTIONS
-            </h3>
-        </div>
+  const isEmpty = count === 0;
 
-        <div className="flex-1 flex flex-col justify-center relative z-10">
-            <div className="flex items-end justify-between bg-white/20 p-3 rounded-xl border border-white/30 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
-                <div>
-                    <div className="text-3xl font-black text-slate-900 leading-none tracking-[-0.05em] drop-shadow-md">{count}</div>
-                    <div className="text-[10px] font-black text-slate-800 uppercase tracking-[0.1em] mt-1">TOTAL EFFECTUÉ</div>
-                </div>
-                <div className="h-8 w-8 rounded-full bg-[#4f46e5]/10 flex items-center justify-center border border-[#4f46e5]/25">
-                    <TrendingUp className="w-4 h-4 text-[#4f46e5]" />
-                </div>
-            </div>
+  return (
+    <div className="dash-card p-3 flex flex-col h-full">
+      <div className="flex items-center gap-2 mb-2">
+        <Syringe className="w-3.5 h-3.5 text-slate-500" />
+        <h3 className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+          Injections
+        </h3>
+      </div>
+
+      {isEmpty ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center gap-1.5">
+          <div className="w-9 h-9 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+          <p className="text-xs font-semibold text-slate-800 leading-tight">
+            No pending injections
+          </p>
+          <p className="text-[10px] text-slate-500 leading-tight">
+            System active · awaiting data
+          </p>
+          <span className="glass-badge glass-badge-accent mt-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 live-dot" />
+            Live
+          </span>
         </div>
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <p className="text-3xl font-bold text-slate-900 tracking-tight">{count}</p>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">
+            Total effectué
+          </p>
+          <div className="mt-2 flex items-center gap-1 text-teal-600">
+            <TrendingUp className="w-3 h-3" />
+            <span className="text-[10px] font-medium">En cours</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

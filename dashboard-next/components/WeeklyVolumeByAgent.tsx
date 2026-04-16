@@ -1,10 +1,81 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from 'recharts';
 import { DashboardData } from '../types';
 
 interface Props {
   weeks: NonNullable<DashboardData['weekly']>['weeks'];
   series: NonNullable<DashboardData['weekly']>['volumeByAgent'];
+}
+
+const COLORS = ['#0D9488', '#6366F1', '#10B981', '#F59E0B', '#EF4444'];
+
+type Totals = Record<string, number>;
+
+interface TooltipEntry {
+  value?: number | string;
+  name?: string;
+  dataKey?: string | number;
+  color?: string;
+  payload?: Record<string, unknown>;
+}
+
+interface TooltipContentProps {
+  active?: boolean;
+  payload?: TooltipEntry[];
+  label?: string | number;
+}
+
+function AgentTooltip({
+  active,
+  payload,
+  label,
+  totals,
+}: TooltipContentProps & { totals: Totals }) {
+  if (!active || !payload || payload.length === 0) return null;
+
+  const weekTotal = payload.reduce(
+    (sum: number, p: TooltipEntry) => sum + (Number(p.value) || 0),
+    0
+  );
+  const sorted = [...payload].sort(
+    (a, b) => (Number(b.value) || 0) - (Number(a.value) || 0)
+  );
+
+  return (
+    <div className="chart-tooltip">
+      <div className="chart-tooltip-title">Semaine {label}</div>
+      {sorted.map((p) => {
+        const value = Number(p.value) || 0;
+        const share = weekTotal > 0 ? Math.round((value / weekTotal) * 100) : 0;
+        return (
+          <div key={String(p.dataKey)} className="chart-tooltip-row">
+            <span className="label">
+              <span className="dot" style={{ background: p.color }} />
+              {p.name}
+            </span>
+            <span className="value">
+              {value} call{value === 1 ? '' : 's'} · {share}%
+            </span>
+          </div>
+        );
+      })}
+      <div className="chart-tooltip-sub">
+        Total semaine: <strong style={{ color: '#0F172A' }}>{weekTotal}</strong>
+        {sorted[0] && (
+          <> · Leader: {sorted[0].name} ({totals[String(sorted[0].dataKey)] ?? 0} cumulés)</>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function WeeklyVolumeByAgent({ weeks, series }: Props) {
@@ -15,79 +86,68 @@ export default function WeeklyVolumeByAgent({ weeks, series }: Props) {
     });
     return row;
   });
-  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
+
+  const totals: Totals = series.reduce<Totals>((acc, s) => {
+    acc[s.agent] = s.series.reduce((sum, v) => sum + (v ?? 0), 0);
+    return acc;
+  }, {});
+
+  const topSeries = series.slice(0, 5);
+
   return (
-      <div className="rounded-[24px] bg-white/40 backdrop-blur-3xl shadow-[0_10px_30px_-10px_rgba(30,58,138,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border border-white/20 border-t-[1px] border-t-white/30 p-6 flex flex-col h-full min-h-0 relative overflow-hidden">
-        <h2 className="mb-4 text-2xl font-semibold text-slate-700 shrink-0 flex items-center uppercase tracking-[0.1em]">
-          <span className="bg-[#0e677a] w-2 h-6 mr-3 rounded-full shadow-sm"></span>
-          Volume par Collaborateur (Semaine)
-        </h2>
-        <div className="flex-1 min-h-0 relative w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.5} vertical={false} />
-              <XAxis 
-                dataKey="week" 
-                tick={{ fontSize: '1.15rem', fill: '#64748b', fontWeight: 700 }} 
-                axisLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-                tickLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-                tickSize={8}
-                dy={10} 
-                padding={{ left: 20, right: 20 }}
-              />
-              <YAxis 
-                tick={{ fontSize: '1.15rem', fill: '#64748b', fontWeight: 700 }} 
-                axisLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-                tickLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-                tickSize={8}
-                dx={-10} 
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  backdropFilter: 'blur(10px)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.5)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  fontWeight: 600,
-                  color: '#334155'
-                }}
-              />
-              <Legend
-                verticalAlign="top"
-                align="right"
-                wrapperStyle={{
-                  padding: '0.5rem 1rem',
-                  fontSize: '1.1rem',
-                  fontWeight: 800,
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  flexWrap: 'wrap',
-                  gap: '10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  backdropFilter: 'blur(12px)',
-                  borderRadius: '1rem',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                  marginBottom: '20px'
-                }}
-                iconType="circle"
-                iconSize={12}
-                formatter={(value, entry: { color?: string }) => (
-                  <span style={{ color: entry.color ?? '#0f172a', marginLeft: '0.25rem', marginRight: '0.5rem' }}>{value}</span>
-                )}
-              />
-            {series.slice(0, 5).map((s, i) => {
+    <div className="dash-card p-4 flex flex-col h-full min-h-0">
+      <h2 className="mb-3 text-xs font-semibold text-slate-700 shrink-0 flex items-center gap-2 uppercase tracking-wider">
+        <span className="w-1 h-4 rounded-full bg-teal-500"></span>
+        Volume par Collaborateur
+      </h2>
+      <div className="flex-1 min-h-0 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 5, right: 15, left: 5, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+            <XAxis
+              dataKey="week"
+              tick={{ fontSize: 11, fill: '#64748B', fontWeight: 500 }}
+              axisLine={{ stroke: '#E2E8F0' }}
+              tickLine={false}
+              dy={6}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: '#64748B', fontWeight: 500 }}
+              axisLine={false}
+              tickLine={false}
+              dx={-5}
+            />
+            <Tooltip
+              cursor={{ stroke: '#CBD5E1', strokeWidth: 1, strokeDasharray: '3 3' }}
+              content={<AgentTooltip totals={totals} />}
+            />
+            <Legend
+              verticalAlign="top"
+              align="right"
+              wrapperStyle={{
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                paddingBottom: '8px',
+              }}
+              iconType="circle"
+              iconSize={7}
+              formatter={(value: string) => (
+                <span style={{ color: '#64748B', marginLeft: '2px' }}>{value}</span>
+              )}
+            />
+            {topSeries.map((s, i) => {
+              const color = COLORS[i % COLORS.length];
               return (
-                <Line 
+                <Line
+                  key={s.agent}
                   type="monotone"
-                  key={s.agent} 
-                  dataKey={s.agent} 
-                  stroke={colors[i % colors.length]}
-                  strokeWidth={4}
-                  dot={{ r: 6, fill: '#fff', strokeWidth: 3, stroke: colors[i % colors.length] }}
-                  activeDot={{ r: 10 }}
-                  style={{ filter: `drop-shadow(0 0 8px ${colors[i % colors.length]}80)` }} 
+                  dataKey={s.agent}
+                  stroke={color}
+                  strokeWidth={2.25}
+                  dot={{ r: 2.5, fill: '#FFFFFF', strokeWidth: 2, stroke: color }}
+                  activeDot={{ r: 5, stroke: color, strokeWidth: 2, fill: '#FFFFFF' }}
+                  animationDuration={900}
+                  animationEasing="ease-out"
                 />
               );
             })}

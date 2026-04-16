@@ -1,5 +1,13 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+} from 'recharts';
 import { DashboardData } from '../types';
 
 interface Props {
@@ -7,61 +15,97 @@ interface Props {
   lines: NonNullable<DashboardData['weekly']>['linesPerWeek'];
 }
 
+interface TooltipEntry {
+  value?: number | string;
+  name?: string;
+  dataKey?: string | number;
+  color?: string;
+}
+
+interface TooltipContentProps {
+  active?: boolean;
+  payload?: TooltipEntry[];
+  label?: string | number;
+}
+
+function LinesTooltip({
+  active,
+  payload,
+  label,
+  totalSum,
+  avg,
+}: TooltipContentProps & { totalSum: number; avg: number }) {
+  if (!active || !payload || payload.length === 0) return null;
+  const value = Number(payload[0].value) || 0;
+  const share = totalSum > 0 ? Math.round((value / totalSum) * 100) : 0;
+  const delta = avg > 0 ? Math.round(((value - avg) / avg) * 100) : 0;
+  return (
+    <div className="chart-tooltip">
+      <div className="chart-tooltip-title">Semaine {label}</div>
+      <div className="chart-tooltip-row">
+        <span className="label">
+          <span className="dot" style={{ background: '#6366F1' }} />
+          Lignes
+        </span>
+        <span className="value">{value}</span>
+      </div>
+      <div className="chart-tooltip-row">
+        <span className="label">Part du total</span>
+        <span className="value">{share}%</span>
+      </div>
+      <div className="chart-tooltip-sub">
+        {delta >= 0 ? '▲' : '▼'} {Math.abs(delta)}% vs. moyenne ({Math.round(avg)})
+      </div>
+    </div>
+  );
+}
+
 export default function WeeklyLinesChart({ weeks, lines }: Props) {
   const data = weeks.map((w, idx) => ({ week: w, lines: lines[idx] ?? 0 }));
+  const totalSum = lines.reduce((s, v) => s + (v ?? 0), 0);
+  const avg = lines.length > 0 ? totalSum / lines.length : 0;
+
   return (
-    <div className="rounded-[24px] bg-white/40 backdrop-blur-3xl shadow-[0_10px_30px_-10px_rgba(30,58,138,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border border-white/20 border-t-[1px] border-t-white/30 p-6 flex flex-col h-full min-h-0 relative overflow-hidden">
-      <h2 className="mb-4 text-2xl font-semibold text-slate-700 shrink-0 flex items-center uppercase tracking-[0.1em]">
-        <span className="bg-[#0e677a] w-2 h-6 mr-3 rounded-full shadow-sm"></span>
+    <div className="dash-card p-4 flex flex-col h-full min-h-0">
+      <h2 className="mb-3 text-xs font-semibold text-slate-700 shrink-0 flex items-center gap-2 uppercase tracking-wider">
+        <span className="w-1 h-4 rounded-full bg-indigo-400"></span>
         Lignes par Semaine
       </h2>
-      <div className="flex-1 min-h-0 relative w-full">
+      <div className="flex-1 min-h-0 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>
+          <AreaChart data={data} margin={{ top: 5, right: 15, left: 5, bottom: 10 }}>
             <defs>
-              <linearGradient id="colorLines" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4}/>
-                <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+              <linearGradient id="linesAreaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6366F1" stopOpacity={0.45} />
+                <stop offset="100%" stopColor="#6366F1" stopOpacity={0.05} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.5} vertical={false} />
-            <XAxis 
-              dataKey="week" 
-              tick={{ fontSize: '1.15rem', fill: '#64748b', fontWeight: 700 }} 
-              axisLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-              tickLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-              tickSize={8}
-              dy={10} 
-              padding={{ left: 20, right: 20 }}
+            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+            <XAxis
+              dataKey="week"
+              tick={{ fontSize: 11, fill: '#64748B', fontWeight: 500 }}
+              axisLine={{ stroke: '#E2E8F0' }}
+              tickLine={false}
+              dy={6}
             />
-            <YAxis 
-              tick={{ fontSize: '1.15rem', fill: '#64748b', fontWeight: 700 }} 
-              axisLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-              tickLine={{ stroke: '#cbd5e1', strokeWidth: 2, strokeLinecap: 'round' }} 
-              tickSize={8}
-              dx={-10} 
+            <YAxis
+              tick={{ fontSize: 11, fill: '#64748B', fontWeight: 500 }}
+              axisLine={false}
+              tickLine={false}
+              dx={-5}
             />
             <Tooltip
-              contentStyle={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                backdropFilter: 'blur(10px)',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.5)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                fontWeight: 600,
-                color: '#334155'
-              }}
+              cursor={{ stroke: '#CBD5E1', strokeWidth: 1, strokeDasharray: '3 3' }}
+              content={<LinesTooltip totalSum={totalSum} avg={avg} />}
             />
-            <Area 
-              type="monotone" 
-              dataKey="lines" 
-              stroke="#8b5cf6" 
-              fillOpacity={1}
-              fill="url(#colorLines)"
-              strokeWidth={5} 
-              dot={{ r: 6, fill: '#fff', strokeWidth: 3, stroke: '#8b5cf6' }} 
-              activeDot={{ r: 10, stroke: '#3b82f6', strokeWidth: 2 }} 
-              style={{ filter: `drop-shadow(0 8px 16px rgba(139,92,246,0.6))` }}
+            <Area
+              type="monotone"
+              dataKey="lines"
+              stroke="#6366F1"
+              strokeWidth={2.5}
+              fill="url(#linesAreaFill)"
+              dot={{ r: 3, fill: '#FFFFFF', strokeWidth: 2, stroke: '#6366F1' }}
+              activeDot={{ r: 6, stroke: '#6366F1', strokeWidth: 2, fill: '#FFFFFF' }}
             />
           </AreaChart>
         </ResponsiveContainer>
